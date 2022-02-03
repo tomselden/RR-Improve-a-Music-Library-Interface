@@ -1,7 +1,11 @@
 import './App.css';
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import { Route, Routes, BrowserRouter } from 'react-router-dom'
+import AlbumView from './components/AlbumView'
+import ArtistView from './components/ArtistView'
 import Gallery from './components/Gallery'
 import SearchBar from './components/SearchBar'
+
 
 function App() {
   let [searchTerm, setSearchTerm] = useState('')
@@ -21,7 +25,7 @@ function App() {
         }
       }
       fetchData()
-  }
+    }
   }, [searchTerm])
 
   const handleSearch = (e, term) => {
@@ -31,9 +35,23 @@ function App() {
 
   return (
     <div className="App">
-      <SearchBar handleSearch={handleSearch} />
       {message}
-      <Gallery data={data} />
+      <BrowserRouter>
+        <Routes>
+          <Route exact path="/" element={
+            <div>
+              <SearchBar handleSearch={handleSearch} />
+              <Gallery data={data} />
+            </div>
+          }/>
+          <Route path="/album/:id" element={
+            <AlbumView/>
+          }/>
+          <Route path="/artist/:id" element={
+            <ArtistView/>
+          }/>
+        </Routes>
+      </BrowserRouter>
     </div>
   );
 }
